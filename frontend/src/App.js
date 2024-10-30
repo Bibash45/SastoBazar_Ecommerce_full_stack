@@ -7,8 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import SoundPreloader from "./utils/preloadSounds";
-import { useDispatch } from "react-redux"; 
-import { playSound, stopSound } from "./slices/soundSlice"; // Import stopSound
+import { useDispatch } from "react-redux";
+import { playSound, stopSound } from "./slices/soundSlice";
 
 const App = () => {
   const dispatch = useDispatch();
