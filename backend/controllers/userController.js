@@ -3,6 +3,7 @@ import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import generateToken from "../utils/generateToken.js";
 import { sendVerificationEmail } from "../utils/emailService.js";
+import { OAuth2Client } from "google-auth-library";
 
 // @desc    Auth user & get token
 // @route   POST/api/users/login
@@ -247,6 +248,51 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// @desc    Google Login
+// @route   POST /api/users/google-login
+// @access  Public
+const googleLogin = asyncHandler(async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    // Verify the Google token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, sub: googleId } = payload;
+
+    // Find or create the user based on the Google ID
+    let user = await User.findOne({ googleId });
+
+    if (!user) {
+      user = await User.create({
+        name,
+        email,
+        googleId,
+        isVerified: true,
+      });
+    }
+
+    // Generate JWT for the user
+    generateToken(res, user._id);
+
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } catch (error) {
+    console.error("Google Login Error:", error);
+    res.status(401).json({ message: "Invalid Google token" });
+  }
+});
+
 export {
   authUser,
   registerUser,
@@ -258,4 +304,5 @@ export {
   getUserByID,
   deleteUser,
   updateUser,
+  googleLogin,
 };
