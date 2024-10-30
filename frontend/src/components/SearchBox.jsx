@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
+import { setActiveLink, playSound } from "../slices/soundSlice"; 
+import { useDispatch } from "react-redux";
 
 const SearchBox = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { keyword: urlKeyword } = useParams();
   const [keyword, setKeyword] = useState(urlKeyword || "");
@@ -10,8 +13,10 @@ const SearchBox = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (keyword.trim()) {
-      setKeyword("");
+      dispatch(setActiveLink(`/search/${keyword}`));
+      dispatch(playSound("mouseSound"));
       navigate(`/search/${keyword}`);
+      setKeyword(""); 
     } else {
       navigate("/");
     }
@@ -26,9 +31,8 @@ const SearchBox = () => {
         onChange={(e) => setKeyword(e.target.value)}
         placeholder="Search..."
         className="mr-sm-2 ml-sm-5"
-      ></Form.Control>
-
-      <Button type="submit" variant="outline-light" className="p-2  ms-2 ">
+      />
+      <Button type="submit" variant="outline-light" className="p-2 ms-2">
         Search
       </Button>
     </Form>

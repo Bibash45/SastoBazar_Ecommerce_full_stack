@@ -32,7 +32,7 @@ const App = () => {
     return () => {
       document.removeEventListener("click", handleUserInteraction);
     };
-  }, [dispatch]);
+  }, [dispatch,handlePlayBackgroundSound]);
 
   return (
     <>
