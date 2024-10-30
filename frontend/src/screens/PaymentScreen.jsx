@@ -5,6 +5,8 @@ import { Form, Button, Col } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { savePaymentMethod } from "../slices/cartSlice";
+import { playSound } from "../slices/soundSlice";
+
 
 const PaymentScreen = () => {
   const navigate = useNavigate();
@@ -19,7 +21,12 @@ const PaymentScreen = () => {
     }
   }, [navigate, shippingAddress]);
 
+  const handleSound = () => {
+    dispatch(playSound("cardSound"));
+  };
+
   const submitHandler = (e) => {
+    handleSound()
     e.preventDefault();
     dispatch(savePaymentMethod(paymentMethod));
     navigate("/placeorder");

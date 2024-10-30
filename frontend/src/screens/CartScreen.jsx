@@ -14,23 +14,32 @@ import { FaTrash } from "react-icons/fa";
 import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
 import Meta from "../components/Meta";
+import { playSound } from "../slices/soundSlice";
+
 
 const CartScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const handleSound = () => {
+    dispatch(playSound("cardSound")); 
+  };
+
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
   const addToCartHandler = async (product, qty) => {
+    // handleSound();
     dispatch(addToCart({ ...product, qty }));
   };
 
   const removeFromCartHandler = async (productId) => {
+    handleSound()
     dispatch(removeFromCart(productId));
   };
 
   const checkoutHandle = () => {
+    handleSound()
     navigate(`/login?redirect=/shipping`);
   };
 
@@ -42,7 +51,7 @@ const CartScreen = () => {
         <h1 style={{ marginBottom: "20px" }}>Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message variant="info">
-            Your cart is empty <Link to="/">Go Back</Link>
+            Your cart is empty <Link to="/" onClick={handleSound}>Go Back</Link>
           </Message>
         ) : (
           <ListGroup variant="flush">

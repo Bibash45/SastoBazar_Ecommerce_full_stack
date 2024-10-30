@@ -20,6 +20,7 @@ import Message from "../components/Message";
 import { addToCart } from "../slices/cartSlice";
 import { toast } from "react-toastify";
 import Meta from "../components/Meta";
+import { playSound } from "../slices/soundSlice";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -46,12 +47,19 @@ const ProductScreen = () => {
 
   // add to cart button handler
   const addToCartHandler = () => {
+    dispatch(playSound("cardSound"))
     dispatch(addToCart({ ...product, qty }));
     navigate("/cart");
   };
+  
+  const handleSound = () => {
+    dispatch(playSound("cardSound")); 
+  };
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    handleSound();
 
     if (!rating) {
       toast.error("Please select a rating");
@@ -68,6 +76,7 @@ const ProductScreen = () => {
         rating,
         comment,
       }).unwrap();
+     
       refetch();
       toast.success("Review Submitted");
       setRating(0);
@@ -77,9 +86,10 @@ const ProductScreen = () => {
     }
   };
 
+ 
   return (
     <>
-      <Link className="btn btn-light my-3" to="/">
+      <Link className="btn btn-light my-3" to="/" onClick={handleSound}>
         Go Back
       </Link>
       {isLoading ? (

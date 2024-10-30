@@ -4,8 +4,15 @@ import { Carousel, Image } from "react-bootstrap";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { useGetTopProductsQuery } from "../slices/productsApiSlice";
+import { useDispatch } from "react-redux";
+import { playSound } from "../slices/soundSlice";
 
 const ProductCarousel = () => {
+  const dispatch = useDispatch();
+
+  const handleSound = () => {
+    dispatch(playSound("cardSound")); 
+  };
   const { data: products, isLoading, error } = useGetTopProductsQuery();
 
   return isLoading ? (
@@ -17,7 +24,7 @@ const ProductCarousel = () => {
       <Carousel pause="hover" className="bg-primary mb-4">
         {products.map((product) => (
           <Carousel.Item key={product._id}>
-            <Link to={`/product/${product._id}`} className="nav-link">
+            <Link to={`/product/${product._id}`} className="nav-link" onClick={handleSound}>
               <Image src={product.image} alt={product.name} fluid />
               <Carousel.Caption className="carousel-caption">
                 <h2>

@@ -38,12 +38,17 @@ const RegisterScreen = () => {
     }
   }, [userInfo, redirect, navigate]);
 
+  const handleSound = () => {
+    dispatch(playSound("cardSound"));
+  };
+
   const handleClick = (to) => {
     dispatch(setActiveLink(to));
-    dispatch(playSound("loginSound")); // Play the mouse click sound
+    dispatch(playSound("loginSound"));
   };
 
   const submitRegisterHandler = async (e) => {
+    handleSound();
     e.preventDefault();
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -60,6 +65,7 @@ const RegisterScreen = () => {
   };
 
   const submitVerifyHandler = async (e) => {
+    handleSound()
     e.preventDefault();
     if (code.length !== 6) {
       toast.error("Verification code must be 6 digits");
@@ -77,7 +83,7 @@ const RegisterScreen = () => {
 
   return (
     <>
-    <SoundPreloader />
+      <SoundPreloader />
       <Meta title="SastoBazaar - Sign Up / Verify" />
       <FormContainer>
         <h1>{isRegistering ? "Sign Up" : "Verify Code"}</h1>

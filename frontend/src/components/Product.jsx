@@ -2,13 +2,20 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
-// import { BASE_URL } from "../constants";
+import { useDispatch } from "react-redux";
+import { playSound } from "../slices/soundSlice";
 
 const Product = ({ product }) => {
+  const dispatch = useDispatch();
+
+  const handleSound = () => {
+    dispatch(playSound("cardSound")); 
+  };
+
   return (
     <Card className="my-3 p-3 rounded">
-      <Link to={`/product/${product._id}`}>
-        <Card.Img src={`/${product.image}`} variant="top"></Card.Img>
+      <Link to={`/product/${product._id}`} onClick={handleSound}>
+        <Card.Img src={`/${product.image}`} variant="top" />
       </Link>
 
       <Card.Body>
@@ -19,7 +26,7 @@ const Product = ({ product }) => {
         </Link>
 
         <Card.Text as="div">
-          <Rating value={product.rating} text={`${product.numReviews}review`} />
+          <Rating value={product.rating} text={`${product.numReviews} review`} />
         </Card.Text>
 
         <Card.Text as="h3">${product.price}</Card.Text>

@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveShippingAddress } from "../slices/cartSlice";
 import CheckoutSteps from "../components/CheckoutSteps";
+import { playSound } from "../slices/soundSlice";
+import { toast } from "react-toastify";
 
 const ShippingScreen = () => {
   const { shippingAddress } = useSelector((state) => state.cart);
@@ -20,8 +22,16 @@ const ShippingScreen = () => {
 
   const dispatch = useDispatch();
 
+  const handleSound = () => {
+    dispatch(playSound("cardSound"));
+  };
+
   const submitHandler = (e) => {
+    handleSound();
     e.preventDefault();
+    if (!(address && city && postalCode && country)) {
+      toast.error("complete the field");
+    }
     dispatch(saveShippingAddress({ address, city, postalCode, country }));
     navigate("/payment");
   };

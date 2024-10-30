@@ -38,8 +38,13 @@ const LoginScreen = () => {
     dispatch(playSound("loginSound")); // Use the correct sound key here
   };
 
+  const handleSound = () => {
+    dispatch(playSound("cardSound"));
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
+    handleSound();
 
     try {
       const res = await login({ email, password }).unwrap();
@@ -94,7 +99,9 @@ const LoginScreen = () => {
         <Row className="py-3">
           <Col>
             New Customer?{" "}
-            <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
+            <Link
+              to={redirect ? `/register?redirect=${redirect}` : "/register"}
+            >
               Register
             </Link>
           </Col>

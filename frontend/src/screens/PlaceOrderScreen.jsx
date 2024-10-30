@@ -8,6 +8,8 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useCreateOrderMutation } from "../slices/ordersApiSlice";
 import { clearCartItems } from "../slices/cartSlice";
+import { playSound } from "../slices/soundSlice";
+
 
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
@@ -27,7 +29,12 @@ const PlaceOrderScreen = () => {
 
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
+  const handleSound = () => {
+    dispatch(playSound("cardSound"));
+  };
+
   const placeOrderHandler = async () => {
+    handleSound()
     try {
       const res = await createOrder({
         orderItems: cart.cartItems,

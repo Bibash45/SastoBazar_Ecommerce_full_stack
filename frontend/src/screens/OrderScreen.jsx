@@ -11,9 +11,11 @@ import {
   useDeliverOrderMutation,
 } from "../slices/ordersApiSlice";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { playSound } from "../slices/soundSlice";
 
 const OrderScreen = () => {
+  const dispatch = useDispatch();
   const { id: orderId } = useParams();
 
   const {
@@ -29,6 +31,10 @@ const OrderScreen = () => {
     useDeliverOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+  const handleSound = () => {
+    dispatch(playSound("cardSound"));
+  };
 
   const {
     data: paypal,
@@ -59,6 +65,7 @@ const OrderScreen = () => {
   }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
 
   async function onApprove(data, actions) {
+    handleSound();
     return actions.order.capture().then(async function (details) {
       try {
         await payOrder({ orderId, details });
@@ -70,6 +77,7 @@ const OrderScreen = () => {
     });
   }
   async function onApproveTest() {
+    handleSound()
     await payOrder({ orderId, details: { payer: {} } });
     refetch();
     toast.success("Payment successful");
@@ -78,6 +86,7 @@ const OrderScreen = () => {
     toast.error(err.message);
   }
   function createOrder(data, actions) {
+    handleSound()
     return actions.order
       .create({
         purchase_units: [
