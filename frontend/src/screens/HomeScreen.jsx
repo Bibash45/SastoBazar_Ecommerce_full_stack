@@ -9,6 +9,8 @@ import Paginate from "../components/Paginate";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
 
+
+
 const HomeScreen = () => {
   const { pageNumber = 1, keyword = "" } = useParams();
   const { data, isLoading, error } = useGetProductsQuery({
@@ -16,9 +18,10 @@ const HomeScreen = () => {
     pageNumber,
   });
 
+  
   return (
     <>
-    <Meta title="SastoBazaar" />
+      <Meta title="SastoBazaar" />
       {!keyword ? (
         <ProductCarousel />
       ) : (

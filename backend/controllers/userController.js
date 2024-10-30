@@ -257,6 +257,7 @@ const googleLogin = asyncHandler(async (req, res) => {
   const { token } = req.body;
 
   try {
+    console.log("Received idToken:", token);
     // Verify the Google token
     const ticket = await client.verifyIdToken({
       idToken: token,
@@ -273,7 +274,6 @@ const googleLogin = asyncHandler(async (req, res) => {
       user = await User.create({
         name,
         email,
-        googleId,
         isVerified: true,
       });
     }

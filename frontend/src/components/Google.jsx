@@ -26,7 +26,7 @@ const Google = () => {
     const token = credentialResponse.credential;
     console.log(token);
     try {
-      const res = await googleLogin({ idToken: token }).unwrap();
+      const res = await googleLogin({  token }).unwrap();
       dispatch(setCredentials({ ...res }));
       handleLinkClick(redirect); // Play sound and set active link
       navigate(redirect);
