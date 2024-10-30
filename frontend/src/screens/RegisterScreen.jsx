@@ -11,6 +11,8 @@ import {
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import Meta from "../components/Meta";
+import { setActiveLink, playSound } from "../slices/soundSlice";
+import SoundPreloader from "../utils/preloadSounds";
 
 const RegisterScreen = () => {
   const [isRegistering, setIsRegistering] = useState(true); // State to manage registration vs verification
@@ -35,6 +37,11 @@ const RegisterScreen = () => {
       navigate(redirect);
     }
   }, [userInfo, redirect, navigate]);
+
+  const handleClick = (to) => {
+    dispatch(setActiveLink(to));
+    dispatch(playSound("loginSound")); // Play the mouse click sound
+  };
 
   const submitRegisterHandler = async (e) => {
     e.preventDefault();
@@ -61,6 +68,7 @@ const RegisterScreen = () => {
     try {
       const res = await verifyUser({ code, email }).unwrap();
       dispatch(setCredentials({ ...res }));
+      handleClick(redirect);
       navigate(redirect);
     } catch (error) {
       toast.error(error?.data?.message || error.error);
@@ -69,6 +77,7 @@ const RegisterScreen = () => {
 
   return (
     <>
+    <SoundPreloader />
       <Meta title="SastoBazaar - Sign Up / Verify" />
       <FormContainer>
         <h1>{isRegistering ? "Sign Up" : "Verify Code"}</h1>

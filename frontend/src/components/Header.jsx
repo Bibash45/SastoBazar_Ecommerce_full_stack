@@ -9,6 +9,8 @@ import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import SearchBox from "./SearchBox";
 import { resetCart } from "../slices/cartSlice";
+import { setActiveLink, playSound } from "../slices/soundSlice"; 
+import  SoundPreloader from "../utils/preloadSounds"
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -30,11 +32,17 @@ const Header = () => {
     }
   };
 
-  return (
+  const handleClick = (to) => {
+    dispatch(setActiveLink(to));
+    dispatch(playSound("mouseSound")); // Play the mouse click sound
+  };
+
+  return (<>
+  <SoundPreloader />
     <header>
       <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
         <Container>
-          <LinkContainer to="/">
+          <LinkContainer to="/" onClick={() => handleClick('/')}>
             <Navbar.Brand>
               <div className="d-flex align-items-center">
                 <img
@@ -59,7 +67,7 @@ const Header = () => {
             <Nav className="ms-auto align-items-center">
               <SearchBox />
 
-              <LinkContainer to="/cart">
+              <LinkContainer to="/cart" onClick={() => handleClick('/cart')}>
                 <Nav.Link>
                   <FaShoppingCart className="nav-icon" />
                   Cart:
@@ -83,7 +91,7 @@ const Header = () => {
                   id="username"
                   className="dropdown-center"
                 >
-                  <LinkContainer to="/profile">
+                  <LinkContainer to="/profile" onClick={() => handleClick('/profile')}>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
 
@@ -92,7 +100,7 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <LinkContainer to="/login">
+                <LinkContainer to="/login" onClick={() => handleClick('/login')}>
                   <Nav.Link>
                     <FaUser className="nav-icon" />
                     Sign In
@@ -106,13 +114,13 @@ const Header = () => {
                   id="adminmenu"
                   className="dropdown-center"
                 >
-                  <LinkContainer to="/admin/productlist">
+                  <LinkContainer to="/admin/productlist" onClick={() => handleClick('/admin/productlist')}>
                     <NavDropdown.Item>Products</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/userlist">
+                  <LinkContainer to="/admin/userlist" onClick={() => handleClick('/admin/userlist')}>
                     <NavDropdown.Item>User</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/orderlist">
+                  <LinkContainer to="/admin/orderlist" onClick={() => handleClick('/admin/orderlist')}>
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
@@ -122,6 +130,7 @@ const Header = () => {
         </Container>
       </Navbar>
     </header>
+    </>
   );
 };
 
