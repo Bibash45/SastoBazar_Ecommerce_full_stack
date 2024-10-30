@@ -7,32 +7,31 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import SoundPreloader from "./utils/preloadSounds";
-import { useDispatch } from "react-redux";
-import { playSound } from "./slices/soundSlice";
+import { useDispatch } from "react-redux"; 
+import { playSound, stopSound } from "./slices/soundSlice"; // Import stopSound
 
 const App = () => {
   const dispatch = useDispatch();
 
-  // Function to play background sound
-  const handlePlayBackgroundSound = () => {
-    dispatch(playSound("backgroundSound")); // Dispatch playSound action
-  };
-
   useEffect(() => {
-    // Function to handle user interaction (click event)
-    const handleUserInteraction = () => {
-      handlePlayBackgroundSound(); // Play sound on user interaction
-      document.removeEventListener("click", handleUserInteraction); // Remove listener after first use
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        // Stop sound when the tab is minimized or hidden
+        dispatch(stopSound("backgroundSound"));
+      } else {
+        // Play sound when the tab is visible again (if desired)
+        dispatch(playSound("backgroundSound"));
+      }
     };
 
-    // Add click event listener to document
-    document.addEventListener("click", handleUserInteraction);
+    // Attach the event listener
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Cleanup event listener on component unmount
+    // Cleanup function to remove the event listener
     return () => {
-      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [dispatch,handlePlayBackgroundSound]);
+  }, [dispatch]);
 
   return (
     <>
