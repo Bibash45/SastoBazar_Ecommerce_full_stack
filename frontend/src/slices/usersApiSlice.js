@@ -57,6 +57,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    verifyUser: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/verifycode`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -69,4 +76,5 @@ export const {
   useDeleteUserMutation,
   useGetUserDetailsQuery,
   useUpdateUserMutation,
+  useVerifyUserMutation,
 } = usersApiSlice;

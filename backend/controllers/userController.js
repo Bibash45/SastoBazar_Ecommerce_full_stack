@@ -2,6 +2,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import generateToken from "../utils/generateToken.js";
+import { sendVerificationEmail } from "../utils/emailService.js";
 
 // @desc    Auth user & get token
 // @route   POST/api/users/login
@@ -13,6 +14,10 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
+    if (!user.isVerified) {
+      res.status(400);
+      throw new Error("Email not verified");
+    }
     generateToken(res, user._id);
 
     res.status(201).json({
@@ -28,39 +33,90 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Register user
-// @route   POST/api/users
+// @route   POST/api/users/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  const userExist = await User.findOne({
-    email,
-  });
+  const userExist = await User.findOne({ email });
 
   if (userExist) {
     res.status(400);
-    throw new Error("User already exist");
+    throw new Error("User already exists");
   }
 
+  // Generate a random 6-digit code for email verification
+  const verificationCode = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString();
+
+  // Set verification code expiration to 10 minutes from now
+  const verificationCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+  // Send verification email
+  await sendVerificationEmail(email, verificationCode);
+
+  // Create the user with a pending verification status
   const user = await User.create({
     name,
     email,
     password,
+    verificationCode, // Store the generated code
+    verificationCodeExpires, // Set expiration time
+    isVerified: false, // Initially not verified
   });
 
   if (user) {
-    generateToken(res, user._id);
-
     res.status(201).json({
-      _id: user._id,
+      message:
+        "Verification code sent to email. Complete registration by verifying the code.",
       email: user.email,
-      name: user.name,
-      isAdmin: user.isAdmin,
     });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
   }
+});
+
+// @desc    Verify user code
+// @route   POST/api/users/verify-code
+// @access  Public
+const verifyUserCode = asyncHandler(async (req, res) => {
+  const { email, code } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  if (user.verificationCode !== code) {
+    res.status(400);
+    throw new Error("Invalid verification code");
+  }
+
+  // Check if the code has expired
+  if (user.verificationCodeExpires < Date.now()) {
+    res.status(400);
+    throw new Error("Verification code has expired");
+  }
+
+  // If everything is valid, mark user as verified
+  user.isVerified = true;
+  user.verificationCode = null; // Clear the verification code after verification
+  user.verificationCodeExpires = null; // Clear the expiration date
+  await user.save();
+
+  generateToken(res, user._id);
+
+  res.status(200).json({
+    message: "User verified and registered successfully.",
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+  });
 });
 
 // @desc  Logout user / clear cookie
@@ -194,6 +250,7 @@ const updateUser = asyncHandler(async (req, res) => {
 export {
   authUser,
   registerUser,
+  verifyUserCode,
   logoutUser,
   getUserProfile,
   updateUserProfile,

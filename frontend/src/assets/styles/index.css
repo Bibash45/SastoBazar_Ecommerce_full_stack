@@ -57,3 +57,27 @@ table th {
   color: white; /* Ensure the icons are visible */
 }
 
+
+/* for google login  */
+
+.hr-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hr-line {
+  flex: 1;
+  border: none;
+  border-top: 1px solid #000; /* Customize color */
+  margin: 0 10px; /* Adjust spacing between line and text */
+}
+
+/* ---------footer start ----------- */
+.footer {
+  background-color: #373737;
+  color: white;
+}
+
+/* -----------end footer ----------- */
+

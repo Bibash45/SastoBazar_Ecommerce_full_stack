@@ -47,7 +47,7 @@ const Header = () => {
                     Sasto
                   </span>
                   <span style={{ color: "blue", fontWeight: "500" }}>
-                    Bazaar
+                    Bazar
                   </span>
                 </span>
               </div>

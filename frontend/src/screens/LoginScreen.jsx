@@ -8,6 +8,8 @@ import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import Meta from "../components/Meta"
+import Google from "../components/Google";
+
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -88,6 +90,16 @@ const LoginScreen = () => {
           </Link>
         </Col>
       </Row>
+      <Row>
+          <div className="text-center hr-wrapper mb-3">
+            <hr className="hr-line" />
+            <span>other options</span>
+            <hr className="hr-line" />
+          </div>
+          <div>
+            <Google />
+          </div>
+        </Row>
     </FormContainer>
     </>
   );
