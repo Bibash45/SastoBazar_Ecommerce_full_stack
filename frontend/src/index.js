@@ -81,7 +81,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <GoogleOAuthProvider
-    clientId="1036966200104-qrqoqh3bqi2luaf7un4c8jvv4cjhibo8.apps.googleusercontent.com"
+    clientId="1031298587882-qsd7q4mv1p3iqo124h9pmfgch9cbluu0.apps.googleusercontent.com"
   >
     <HelmetProvider>
       <Provider store={store}>
