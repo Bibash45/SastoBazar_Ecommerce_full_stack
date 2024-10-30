@@ -9,7 +9,7 @@ const loginSoundAudio = new Audio(loginSound);
 const backgroundSoundAudio = new Audio(backgroundSound);
 const cardSoundAudio = new Audio(cardSound);
 
-backgroundSoundAudio.volume = 0.2;  
+backgroundSoundAudio.volume = 0.1;  
 mouseClickSound.volume = 0.3;
 cardSoundAudio.volume = 0.3;
 
