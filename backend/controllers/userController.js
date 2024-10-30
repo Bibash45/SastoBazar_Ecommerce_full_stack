@@ -254,12 +254,12 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // @route   POST /api/users/google-login
 // @access  Public
 const googleLogin = asyncHandler(async (req, res) => {
-  const { idToken } = req.body;
+  const { token } = req.body;
 
   try {
     // Verify the Google token
     const ticket = await client.verifyIdToken({
-      idToken: idToken,
+      idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
 
