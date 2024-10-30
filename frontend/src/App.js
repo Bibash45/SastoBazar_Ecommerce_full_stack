@@ -14,21 +14,23 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Set a delay of 3 seconds to play the background sound
+    const playSoundWithDelay = setTimeout(() => {
+      dispatch(playSound("backgroundSound"));
+    }, 3000); // 3000 milliseconds = 3 seconds
+
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
-        // Stop sound when the tab is minimized or hidden
         dispatch(stopSound("backgroundSound"));
       } else {
-        // Play sound when the tab is visible again (if desired)
         dispatch(playSound("backgroundSound"));
       }
     };
 
-    // Attach the event listener
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Cleanup function to remove the event listener
     return () => {
+      clearTimeout(playSoundWithDelay); // Clear the timeout if the component unmounts
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [dispatch]);
