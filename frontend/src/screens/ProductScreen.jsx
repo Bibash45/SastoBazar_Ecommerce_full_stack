@@ -241,9 +241,9 @@ const ProductScreen = () => {
                       </Button>
                     </Form>
                   ) : (
-                    <Message>
+                    <Message >
                       Please &nbsp;
-                      <Link to="/login" className="text-black">
+                      <Link to="/login" className="text-black" onClick={handleSound}>
                         sign in
                       </Link>{" "}
                       to write a review
