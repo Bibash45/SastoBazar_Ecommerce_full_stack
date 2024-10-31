@@ -33,6 +33,11 @@ const PlaceOrderScreen = () => {
     dispatch(playSound("cardSound"));
   };
 
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
+
   const placeOrderHandler = async () => {
     handleSound()
     try {
@@ -48,6 +53,7 @@ const PlaceOrderScreen = () => {
       dispatch(clearCartItems());
       navigate(`/order/${res._id}`);
     } catch (error) {
+    handleNotificationSound()
       toast.error(error);
     }
   };

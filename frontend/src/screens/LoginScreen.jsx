@@ -42,6 +42,11 @@ const LoginScreen = () => {
     dispatch(playSound("cardSound"));
   };
 
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
+
   const submitHandler = async (e) => {
     e.preventDefault();
     handleSound();
@@ -52,6 +57,7 @@ const LoginScreen = () => {
       handleLinkClick(redirect); // Play sound and set active link
       navigate(redirect);
     } catch (error) {
+      handleNotificationSound()
       toast.error(error?.data?.message || error.error);
       console.error("Login error:", error); // Log the error for debugging
     }

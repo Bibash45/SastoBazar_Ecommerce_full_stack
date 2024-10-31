@@ -8,6 +8,8 @@ import { useVerifyUserMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import Meta from "../components/Meta";
+import { playSound } from "../slices/soundSlice";
+
 
 const VerifyCode = () => {
   const [code, setCode] = useState("");
@@ -21,9 +23,15 @@ const VerifyCode = () => {
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
 
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
+
   const submitHandler = async (e) => {
     e.preventDefault();
     if (code.length !== 6) {
+handleNotificationSound()
       toast.error("Verification code must be 6 digits");
       return;
     }
@@ -33,6 +41,7 @@ const VerifyCode = () => {
       dispatch(setCredentials({ ...res }));
       navigate(redirect);
     } catch (error) {
+      handleNotificationSound()
       toast.error(error?.data?.message || error.error);
     }
   };

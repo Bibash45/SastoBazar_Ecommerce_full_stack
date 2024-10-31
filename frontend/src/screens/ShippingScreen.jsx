@@ -25,11 +25,16 @@ const ShippingScreen = () => {
   const handleSound = () => {
     dispatch(playSound("cardSound"));
   };
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
 
   const submitHandler = (e) => {
     handleSound();
     e.preventDefault();
     if (!(address && city && postalCode && country)) {
+      handleNotificationSound()
       toast.error("complete the field");
     }
     dispatch(saveShippingAddress({ address, city, postalCode, country }));

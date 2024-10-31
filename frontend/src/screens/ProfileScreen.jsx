@@ -10,6 +10,7 @@ import { setCredentials } from "../slices/authSlice";
 import { FaTimes } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import Meta from "../components/Meta";
+import { playSound } from "../slices/soundSlice";
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
@@ -38,9 +39,15 @@ const ProfileScreen = () => {
     }
   }, [userInfo, userInfo.name, userInfo.email]);
 
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
+
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
+      handleNotificationSound()
       toast.error("Passwords do not match");
     } else {
       try {
@@ -51,8 +58,10 @@ const ProfileScreen = () => {
           password,
         }).unwrap();
         dispatch(setCredentials(res));
+        handleNotificationSound()
         toast.success("Profile updated successfully");
       } catch (error) {
+        handleNotificationSound()
         toast.error(error?.data?.message || error.error);
       }
     }

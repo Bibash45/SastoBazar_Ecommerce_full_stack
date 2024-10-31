@@ -16,7 +16,7 @@ import { setActiveLink, playSound } from "../slices/soundSlice";
 import SoundPreloader from "../utils/preloadSounds";
 
 const RegisterScreen = () => {
-  const [isRegistering, setIsRegistering] = useState(true);
+  const [isRegistering,setIsRegistering] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,10 +48,16 @@ const RegisterScreen = () => {
     dispatch(playSound("loginSound"));
   };
 
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
+
   const submitRegisterHandler = async (e) => {
     handleSound();
     e.preventDefault();
     if (password !== confirmPassword) {
+      handleNotificationSound()
       toast.error("Passwords do not match");
       return;
     }
@@ -62,12 +68,15 @@ const RegisterScreen = () => {
       if (res.message) {
         // If the response contains a message, it indicates success
         setIsRegistering(false); 
+        handleNotificationSound()
         toast.success(res.message);
       } else {
+        handleNotificationSound()
         toast.warn("User already exists. Please verify.");
         setIsRegistering(false);
       }
     } catch (error) {
+      handleNotificationSound()
       toast.error(error?.data?.message || error.error);
     }
   };
@@ -76,6 +85,7 @@ const RegisterScreen = () => {
     handleSound();
     e.preventDefault();
     if (code.length !== 6) {
+      handleNotificationSound()
       toast.error("Verification code must be 6 digits");
       return;
     }
@@ -85,6 +95,7 @@ const RegisterScreen = () => {
       handleClick(redirect);
       navigate(redirect);
     } catch (error) {
+      handleNotificationSound()
       toast.error(error?.data?.message || error.error);
     }
   };
@@ -92,8 +103,10 @@ const RegisterScreen = () => {
   const resendCodeHandler = async () => {
     try {
       await resendCode({ email }).unwrap();
+      handleNotificationSound()
       toast.success("Verification code resent");
     } catch (error) {
+      handleNotificationSound()
       toast.error(error?.data?.message || error.error);
     }
   };

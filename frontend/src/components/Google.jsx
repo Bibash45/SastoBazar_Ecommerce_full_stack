@@ -22,6 +22,11 @@ const Google = () => {
     dispatch(playSound("loginSound")); // Use the correct sound key here
   };
 
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
+
   const handleSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
     console.log(token);
@@ -31,6 +36,7 @@ const Google = () => {
       handleLinkClick(redirect); // Play sound and set active link
       navigate(redirect);
     } catch (error) {
+      handleNotificationSound()
       toast.error(error?.data?.message || error.error);
       console.error("Login error:", error); // Log the error for debugging
     }

@@ -36,6 +36,11 @@ const OrderScreen = () => {
     dispatch(playSound("cardSound"));
   };
 
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
+
   const {
     data: paypal,
     isLoading: loadingPayPal,
@@ -70,8 +75,10 @@ const OrderScreen = () => {
       try {
         await payOrder({ orderId, details });
         refetch();
+        handleNotificationSound()
         toast.success("Payment successful");
       } catch (error) {
+        handleNotificationSound()
         toast.error(error?.data?.message || error.message);
       }
     });
@@ -80,9 +87,11 @@ const OrderScreen = () => {
     handleSound()
     await payOrder({ orderId, details: { payer: {} } });
     refetch();
+    handleNotificationSound()
     toast.success("Payment successful");
   }
   function onError(err) {
+    handleNotificationSound()
     toast.error(err.message);
   }
   function createOrder(data, actions) {
@@ -107,8 +116,10 @@ const OrderScreen = () => {
     try {
       await deliverOrder(orderId);
       refetch();
+      handleNotificationSound()
       toast.success("Order delivered");
     } catch (error) {
+      handleNotificationSound()
       toast.error(error?.data?.message || error.message);
     }
   };

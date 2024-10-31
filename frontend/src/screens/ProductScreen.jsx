@@ -56,17 +56,23 @@ const ProductScreen = () => {
     dispatch(playSound("cardSound")); 
   };
 
+  const handleNotificationSound=()=>{
+    dispatch(playSound("notificationSound"))
+  }
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
     handleSound();
 
     if (!rating) {
+      handleNotificationSound()
       toast.error("Please select a rating");
       return;
     }
 
     if (!comment) {
+      handleNotificationSound()
       toast.error("Please add a comment");
     }
 
@@ -78,10 +84,12 @@ const ProductScreen = () => {
       }).unwrap();
      
       refetch();
+      handleNotificationSound()
       toast.success("Review Submitted");
       setRating(0);
       setComment("");
     } catch (err) {
+      handleNotificationSound()
       toast.error(err?.data?.message || err.error);
     }
   };

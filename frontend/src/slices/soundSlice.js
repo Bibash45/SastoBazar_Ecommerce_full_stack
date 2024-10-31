@@ -3,13 +3,15 @@ import mouseClick from "../assets/audio/nav.mp3";
 import loginSound from "../assets/audio/welcome.m4a";
 // import backgroundSound from "../assets/audio/sushant.mp3";
 import cardSound from "../assets/audio/card.mp3";
+import notificationSound from "../assets/audio/notify.mp3";
 
 const mouseClickSound = new Audio(mouseClick);
 const loginSoundAudio = new Audio(loginSound);
 // const backgroundSoundAudio = new Audio(backgroundSound);
 const cardSoundAudio = new Audio(cardSound);
+const notificationSoundAudio = new Audio(notificationSound);
 
-// backgroundSoundAudio.volume = 0.1;  
+// backgroundSoundAudio.volume = 0.1;
 // mouseClickSound.volume = 0.5;
 // cardSoundAudio.volume = 0.5;
 
@@ -21,8 +23,9 @@ const initialState = {
     loginSound: loginSoundAudio,
     // backgroundSound: backgroundSoundAudio,
     cardSound: cardSoundAudio,
+    notificationSound: notificationSoundAudio,
   },
-  isBackgroundPlaying: false,  // Track if background sound is playing
+  isBackgroundPlaying: false, // Track if background sound is playing
 };
 
 const soundSlice = createSlice({
@@ -41,7 +44,9 @@ const soundSlice = createSlice({
         }
 
         sound.currentTime = 0; // Reset to start
-        sound.play().catch((error) => console.error("Error playing sound:", error));
+        sound
+          .play()
+          .catch((error) => console.error("Error playing sound:", error));
 
         // Update state if background sound is played
         if (action.payload === "backgroundSound") {
@@ -53,7 +58,7 @@ const soundSlice = createSlice({
     stopSound: (state, action) => {
       const sound = state.sounds[action.payload];
       if (sound) {
-        sound.pause(); 
+        sound.pause();
         if (action.payload === "backgroundSound") {
           state.isBackgroundPlaying = false; // Reset state
         }
@@ -62,5 +67,5 @@ const soundSlice = createSlice({
   },
 });
 
-export const { setActiveLink, playSound, stopSound } = soundSlice.actions; 
+export const { setActiveLink, playSound, stopSound } = soundSlice.actions;
 export default soundSlice.reducer;
