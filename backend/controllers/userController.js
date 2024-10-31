@@ -42,8 +42,11 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExist = await User.findOne({ email });
 
   if (userExist) {
-    res.status(400);
-    throw new Error("User already exists");
+    
+    res.status(200).json({
+      message: "User already exist , please complete verification step to continue",
+    });
+    return; // Stop further execution
   }
 
   // Generate a random 6-digit code for email verification
@@ -51,26 +54,22 @@ const registerUser = asyncHandler(async (req, res) => {
     100000 + Math.random() * 900000
   ).toString();
 
-  // Set verification code expiration to 10 minutes from now
   const verificationCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-  // Send verification email
   await sendVerificationEmail(email, verificationCode);
 
-  // Create the user with a pending verification status
   const user = await User.create({
     name,
     email,
     password,
-    verificationCode, // Store the generated code
-    verificationCodeExpires, // Set expiration time
-    isVerified: false, // Initially not verified
+    verificationCode,
+    verificationCodeExpires,
+    isVerified: false,
   });
 
   if (user) {
     res.status(201).json({
-      message:
-        "Verification code sent to email. Complete registration by verifying the code.",
+      message: "Verification code sent to email. Complete registration by verifying the code.",
       email: user.email,
     });
   } else {
@@ -78,6 +77,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
+
 
 // @desc    Verify user code
 // @route   POST/api/users/verify-code
@@ -293,6 +293,40 @@ const googleLogin = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Resend verification code
+// @route   POST /api/users/resend-verify-code
+// @access  Public
+const resendVerificationCode = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  if (user.isVerified) {
+    res.status(400);
+    throw new Error("User is already verified");
+  }
+
+  // Generate a new 6-digit code for email verification
+  const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const verificationCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+  // Send verification email
+  await sendVerificationEmail(email, verificationCode);
+
+  // Update user with new verification code and expiration time
+  user.verificationCode = verificationCode;
+  user.verificationCodeExpires = verificationCodeExpires;
+  await user.save();
+
+  res.status(200).json({ message: "Verification code sent to email" });
+});
+
+
 export {
   authUser,
   registerUser,
@@ -305,4 +339,5 @@ export {
   deleteUser,
   updateUser,
   googleLogin,
+  resendVerificationCode,
 };

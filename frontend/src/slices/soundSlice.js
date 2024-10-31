@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import mouseClick from "../assets/audio/nav.mp3";
 import loginSound from "../assets/audio/welcome.m4a";
-import backgroundSound from "../assets/audio/sushant.mp3";
+// import backgroundSound from "../assets/audio/sushant.mp3";
 import cardSound from "../assets/audio/card.mp3";
 
 const mouseClickSound = new Audio(mouseClick);
 const loginSoundAudio = new Audio(loginSound);
-const backgroundSoundAudio = new Audio(backgroundSound);
+// const backgroundSoundAudio = new Audio(backgroundSound);
 const cardSoundAudio = new Audio(cardSound);
 
-backgroundSoundAudio.volume = 0.1;  
+// backgroundSoundAudio.volume = 0.1;  
 // mouseClickSound.volume = 0.5;
 // cardSoundAudio.volume = 0.5;
 
@@ -19,7 +19,7 @@ const initialState = {
   sounds: {
     mouseSound: mouseClickSound,
     loginSound: loginSoundAudio,
-    backgroundSound: backgroundSoundAudio,
+    // backgroundSound: backgroundSoundAudio,
     cardSound: cardSoundAudio,
   },
   isBackgroundPlaying: false,  // Track if background sound is playing

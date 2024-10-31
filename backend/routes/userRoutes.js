@@ -11,13 +11,15 @@ import {
   updateUser,
   googleLogin,
   verifyUserCode,
+  resendVerificationCode,
 } from "../controllers/userController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.route("/").post(registerUser).get(protect, admin, getUsers);
-router.route("/verifycode").post(verifyUserCode);
+router.route("/verifycode").post(verifyUserCode)
+router.route("/resendcode").post(resendVerificationCode)
 
 router.route("/google-login").post(googleLogin);
 router.post("/logout", logoutUser);

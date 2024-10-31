@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 import {
   useRegisterMutation,
   useVerifyUserMutation,
+  useResendCodeMutation,
 } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
@@ -15,7 +16,7 @@ import { setActiveLink, playSound } from "../slices/soundSlice";
 import SoundPreloader from "../utils/preloadSounds";
 
 const RegisterScreen = () => {
-  const [isRegistering, setIsRegistering] = useState(true); // State to manage registration vs verification
+  const [isRegistering, setIsRegistering] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,8 +26,8 @@ const RegisterScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [register, { isLoading: isRegisteringLoading }] = useRegisterMutation();
-  const [verifyUser, { isLoading: isVerifyingLoading }] =
-    useVerifyUserMutation();
+  const [verifyUser, { isLoading: isVerifyingLoading }] = useVerifyUserMutation();
+  const [resendCode, { isLoading: isResendingLoading }] = useResendCodeMutation();
   const { userInfo } = useSelector((state) => state.auth);
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -56,16 +57,23 @@ const RegisterScreen = () => {
     }
     try {
       const res = await register({ name, email, password }).unwrap();
-      // dispatch(setCredentials({ ...res }));
-      toast.success(res.message);
-      setIsRegistering(false); // Switch to verification
+      console.log(res);
+  
+      if (res.message) {
+        // If the response contains a message, it indicates success
+        setIsRegistering(false); 
+        toast.success(res.message);
+      } else {
+        toast.warn("User already exists. Please verify.");
+        setIsRegistering(false);
+      }
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }
   };
-
+  
   const submitVerifyHandler = async (e) => {
-    handleSound()
+    handleSound();
     e.preventDefault();
     if (code.length !== 6) {
       toast.error("Verification code must be 6 digits");
@@ -76,6 +84,15 @@ const RegisterScreen = () => {
       dispatch(setCredentials({ ...res }));
       handleClick(redirect);
       navigate(redirect);
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
+  };
+
+  const resendCodeHandler = async () => {
+    try {
+      await resendCode({ email }).unwrap();
+      toast.success("Verification code resent");
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }
@@ -130,20 +147,25 @@ const RegisterScreen = () => {
               </Form.Group>
             </>
           ) : (
-            <Form.Group controlId="code" className="my-3">
-              <Form.Label>Verification Code:</Form.Label>
-              <Form.Control
-                type="text"
-                value={code}
-                placeholder="Enter code"
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (/^\d*$/.test(value)) {
-                    setCode(value);
-                  }
-                }}
-              />
-            </Form.Group>
+            <>
+              <Form.Group controlId="code" className="my-3">
+                <Form.Label>Verification Code:</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={code}
+                  placeholder="Enter code"
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                      setCode(value);
+                    }
+                  }}
+                />
+              </Form.Group>
+              <Button variant="danger" className="text-light btn-sm" onClick={resendCodeHandler} disabled={isResendingLoading}>
+                {isResendingLoading ? "Sending..." : "Send Code"}
+              </Button>
+            </>
           )}
           <Form.Group>
             <Button
