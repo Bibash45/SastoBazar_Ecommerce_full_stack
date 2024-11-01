@@ -11,7 +11,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      // Optional: add email format validation
       validate: {
         validator: function (v) {
           return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v);
@@ -31,13 +30,21 @@ const userSchema = mongoose.Schema(
     isVerified: {
       type: Boolean,
       required: true,
-      default: false, // User is not verified by default
+      default: false,
     },
     verificationCode: {
       type: String,
-      default: null, // Store verification code temporarily
+      default: null,
     },
     verificationCodeExpires: {
+      type: Date,
+      default: null,
+    },
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
+    resetPasswordExpires: {
       type: Date,
       default: null,
     },

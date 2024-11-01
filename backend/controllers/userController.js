@@ -2,8 +2,10 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import generateToken from "../utils/generateToken.js";
-import { sendVerificationEmail } from "../utils/emailService.js";
+import { sendVerificationEmail,sendResetPasswordEmail } from "../utils/emailService.js";
 import { OAuth2Client } from "google-auth-library";
+import bcrypt from "bcryptjs"
+
 
 // @desc    Auth user & get token
 // @route   POST/api/users/login
@@ -326,6 +328,73 @@ const resendVerificationCode = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Verification code sent to email" });
 });
 
+// @desc    Forgot Password - Send reset password email
+// @route   POST /api/users/forgot-password
+// @access  Public
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  // Check if the user exists
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  // Generate a reset token and expiration time
+  const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "15m",
+  });
+  const resetTokenExpires = new Date(Date.now() + 15 * 60 * 1000); // Token valid for 15 minutes
+
+  // Set token and expiration in the user model
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = resetTokenExpires;
+  await user.save();
+
+  // Generate reset password link
+  const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+
+  // Send reset password email
+  await sendResetPasswordEmail(email, resetLink);
+
+  res.status(200).json({ message: "Password reset email sent" });
+});
+
+// @desc    Reset Password - Update user password
+// @route   POST /api/users/reset-password
+// @access  Public
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token, password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    res.status(400);
+    throw new Error("Passwords do not match");
+  }
+
+  // Decode token and find user
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const user = await User.findOne({
+    _id: decoded.id,
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() }, // Ensure token hasn't expired
+  });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid or expired token");
+  }
+
+  // Hash new password and save it to user
+  user.password = password;
+  // user.password = await bcrypt.hash(password, 10);
+  user.resetPasswordToken = null; // Clear reset token
+  user.resetPasswordExpires = null; // Clear token expiration
+  await user.save();
+
+  res.status(200).json({ message: "Password reset successful" });
+});
+
 
 export {
   authUser,
@@ -340,4 +409,6 @@ export {
   updateUser,
   googleLogin,
   resendVerificationCode,
+  forgotPassword,
+  resetPassword,
 };

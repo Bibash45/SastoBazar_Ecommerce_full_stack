@@ -42,10 +42,9 @@ const LoginScreen = () => {
     dispatch(playSound("cardSound"));
   };
 
-  const handleNotificationSound=()=>{
-    dispatch(playSound("notificationSound"))
-  }
-
+  const handleNotificationSound = () => {
+    dispatch(playSound("notificationSound"));
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -57,7 +56,7 @@ const LoginScreen = () => {
       handleLinkClick(redirect); // Play sound and set active link
       navigate(redirect);
     } catch (error) {
-      handleNotificationSound()
+      handleNotificationSound();
       toast.error(error?.data?.message || error.error);
       console.error("Login error:", error); // Log the error for debugging
     }
@@ -93,8 +92,8 @@ const LoginScreen = () => {
             <Button
               type="submit"
               variant="primary"
-              className="mt-2"
               disabled={isLoading}
+              className="w-100"
             >
               Sign In
             </Button>
@@ -102,16 +101,25 @@ const LoginScreen = () => {
 
           {isLoading && <Loader />}
         </Form>
-        <Row className="py-3">
+
+        {/* Add Forgot Password link here */}
+        <Row className="pt-3 pb-3 text-center">
           <Col>
-            New Customer?{" "}
+            New Customer?
             <Link
+            className="text-info"
               to={redirect ? `/register?redirect=${redirect}` : "/register"}
             >
               Register
             </Link>
           </Col>
         </Row>
+        <Row className="pb-3 text-center">
+          <Col>
+            <Link to="/forgot-password" className="text-info">Forgot Password?</Link>
+          </Col>
+        </Row>
+
         <Row>
           <div className="text-center hr-wrapper mb-3">
             <hr className="hr-line" />

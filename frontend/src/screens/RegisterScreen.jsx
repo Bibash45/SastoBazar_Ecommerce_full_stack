@@ -56,6 +56,10 @@ const RegisterScreen = () => {
   const submitRegisterHandler = async (e) => {
     handleSound();
     e.preventDefault();
+    if(!(name && email && password && confirmPassword)){
+      handleNotificationSound()
+      toast.error("Complete the field to continue..")
+    }
     if (password !== confirmPassword) {
       handleNotificationSound()
       toast.error("Passwords do not match");
@@ -76,8 +80,10 @@ const RegisterScreen = () => {
         setIsRegistering(false);
       }
     } catch (error) {
-      handleNotificationSound()
-      toast.error(error?.data?.message || error.error);
+      // handleNotificationSound()
+      // toast.error(error?.data?.message || error.error);
+      console.log(error);
+      
     }
   };
   
@@ -184,7 +190,7 @@ const RegisterScreen = () => {
             <Button
               type="submit"
               variant="primary"
-              className="mt-2"
+              className="mt-2 w-100"
               disabled={
                 isRegistering ? isRegisteringLoading : isVerifyingLoading
               }
@@ -196,12 +202,14 @@ const RegisterScreen = () => {
             <Loader />
           )}
         </Form>
-        <Row className="py-3">
+        <Row className="py-3 text-center">
           <Col>
             {isRegistering ? (
               <>
                 Already have an account?{" "}
-                <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
+                <Link
+                className="text-info"
+                to={redirect ? `/login?redirect=${redirect}` : "/login"}>
                   Login
                 </Link>
               </>

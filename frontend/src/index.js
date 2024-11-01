@@ -33,6 +33,8 @@ import ProductListScreen from "./screens/admin/ProductListScreen.jsx";
 import ProductEditScreen from "./screens/admin/ProductEditScreen.jsx";
 import UserListScreen from "./screens/admin/UserListScreen.jsx";
 import UserEditScreen from "./screens/admin/UserEditScreen.jsx";
+import ResetPassword from "./screens/ResetPassword.jsx";
+import ForgotPassword from "./screens/ForgotPassword.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,6 +54,9 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+
 
       <Route path="" element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingScreen />} />
@@ -78,10 +83,8 @@ const router = createBrowserRouter(
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // <React.StrictMode>
-  <GoogleOAuthProvider
-    clientId="1031298587882-qsd7q4mv1p3iqo124h9pmfgch9cbluu0.apps.googleusercontent.com"
-  >
+  <React.StrictMode>
+  <GoogleOAuthProvider clientId="1031298587882-qsd7q4mv1p3iqo124h9pmfgch9cbluu0.apps.googleusercontent.com">
     <HelmetProvider>
       <Provider store={store}>
         <PayPalScriptProvider deferLoading={true}>
@@ -90,5 +93,5 @@ root.render(
       </Provider>
     </HelmetProvider>
   </GoogleOAuthProvider>
-  // {/* </React.StrictMode> */}
+   </React.StrictMode>
 );
