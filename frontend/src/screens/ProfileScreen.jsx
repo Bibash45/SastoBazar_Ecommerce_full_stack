@@ -42,10 +42,14 @@ const ProfileScreen = () => {
   const handleNotificationSound=()=>{
     dispatch(playSound("notificationSound"))
   }
+  const handleButtonSound=()=>{
+    dispatch(playSound("cardSound"))
+  }
 
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    handleButtonSound()
     if (password !== confirmPassword) {
       handleNotificationSound()
       toast.error("Passwords do not match");
