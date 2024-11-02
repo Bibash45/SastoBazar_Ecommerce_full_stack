@@ -102,7 +102,7 @@ const Footer = () => {
       <div className="align-items-center text-white pb-1">
         <div className="border-top text-white py-2 mx-5 opacity-30">
           <p className="m-0 text-center opacity-50">
-            Copyright © 2022. All rights reserved.
+            Copyright © 2024. All rights reserved.
           </p>
         </div>
       </div>

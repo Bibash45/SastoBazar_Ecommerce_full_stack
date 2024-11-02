@@ -1,8 +1,4 @@
-// emailService.js
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -14,7 +10,7 @@ const transporter = nodemailer.createTransport({
 
 export const sendVerificationEmail = async (email, code) => {
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: `Sasto Bazar - ${process.env.EMAIL_USER}`,
     to: email,
     subject: "Your Verification Code from SastoBazaar",
     html: `
@@ -90,7 +86,6 @@ export const sendVerificationEmail = async (email, code) => {
     throw new Error("Failed to send verification email");
   }
 };
-
 
 // Function to send reset password email
 export const sendResetPasswordEmail = async (email, resetLink) => {
