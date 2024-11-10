@@ -23,7 +23,7 @@ const OrderScreen = () => {
     refetch,
     isLoading,
     error,
-  } = useGetOrderDetailsQuery({orderId,order});
+  } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
 
@@ -36,10 +36,9 @@ const OrderScreen = () => {
     dispatch(playSound("cardSound"));
   };
 
-  const handleNotificationSound=()=>{
-    dispatch(playSound("notificationSound"))
-  }
-
+  const handleNotificationSound = () => {
+    dispatch(playSound("notificationSound"));
+  };
 
   const {
     data: paypal,
@@ -75,27 +74,27 @@ const OrderScreen = () => {
       try {
         await payOrder({ orderId, details });
         refetch();
-        handleNotificationSound()
+        handleNotificationSound();
         toast.success("Payment successful");
       } catch (error) {
-        handleNotificationSound()
+        handleNotificationSound();
         toast.error(error?.data?.message || error.message);
       }
     });
   }
   async function onApproveTest() {
-    handleSound()
+    handleSound();
     await payOrder({ orderId, details: { payer: {} } });
     refetch();
-    handleNotificationSound()
+    handleNotificationSound();
     toast.success("Payment successful");
   }
   function onError(err) {
-    handleNotificationSound()
+    handleNotificationSound();
     toast.error(err.message);
   }
   function createOrder(data, actions) {
-    handleSound()
+    handleSound();
     return actions.order
       .create({
         purchase_units: [
@@ -114,12 +113,12 @@ const OrderScreen = () => {
 
   const deliverOrderHandler = async () => {
     try {
-      await deliverOrder({orderId,order});
+      await deliverOrder({ orderId, order });
       refetch();
-      handleNotificationSound()
+      handleNotificationSound();
       toast.success("Order delivered");
     } catch (error) {
-      handleNotificationSound()
+      handleNotificationSound();
       toast.error(error?.data?.message || error.message);
     }
   };
