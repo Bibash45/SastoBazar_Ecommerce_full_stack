@@ -23,7 +23,7 @@ const OrderScreen = () => {
     refetch,
     isLoading,
     error,
-  } = useGetOrderDetailsQuery(orderId);
+  } = useGetOrderDetailsQuery({orderId,order});
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
 
