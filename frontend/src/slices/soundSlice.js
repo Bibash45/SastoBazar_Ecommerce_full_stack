@@ -12,7 +12,7 @@ const cardSoundAudio = new Audio(cardSound);
 const notificationSoundAudio = new Audio(notificationSound);
 
 // backgroundSoundAudio.volume = 0.1;
-mouseClickSound.volume = 0.1;
+// mouseClickSound.volume = 0.1;
 // cardSoundAudio.volume = 0.5;
 
 // Initial state

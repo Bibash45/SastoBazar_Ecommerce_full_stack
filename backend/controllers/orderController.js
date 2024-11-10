@@ -1,5 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from "../models/orderModel.js";
+import { sendOrderDeliveredEmail } from "../utils/emailService.js";
 
 // @desc    Create new order
 // @route   POST/api/orders
@@ -96,10 +97,16 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
+  const orderData = req.body;
+  const { email } = orderData.user;
+  console.log(email);
+
   if (order) {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
     const updateOrder = await order.save();
+
+    await sendOrderDeliveredEmail(email, orderData);
     res.status(200).json(updateOrder);
   } else {
     res.status(400);

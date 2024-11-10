@@ -114,7 +114,7 @@ const OrderScreen = () => {
 
   const deliverOrderHandler = async () => {
     try {
-      await deliverOrder(orderId);
+      await deliverOrder({orderId,order});
       refetch();
       handleNotificationSound()
       toast.success("Order delivered");
