@@ -154,6 +154,12 @@ export const sendResetPasswordEmail = async (email, resetLink) => {
 
 // sending delivered email to customer
 export const sendOrderDeliveredEmail = async (email, order) => {
+  const attachments = order.orderItems.map(item => ({
+    filename: item.image,
+    path: `../../${item.image}`,  // Path to the local image
+    cid: item.image  // Content-ID, used to reference image in HTML
+  }));
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -198,7 +204,7 @@ export const sendOrderDeliveredEmail = async (email, order) => {
                 .map(
                   (item) => `
                 <div class="order-item">
-                  <img src="/${item.image}" alt="${item.name}" width="50" height="50">
+                  <img src="cid:${item.image}" alt="${item.name}" width="50" height="50">  <!-- Using cid here -->
                   <div class="item-info">
                     <p><strong>Product:</strong> ${item.name}</p>
                     <p><strong>Quantity:</strong> ${item.qty}</p>
@@ -210,12 +216,8 @@ export const sendOrderDeliveredEmail = async (email, order) => {
                 .join("")}
               
               <h3>Shipping Address:</h3>
-              <p>${order.shippingAddress.address}, ${
-      order.shippingAddress.city
-    }</p>
-              <p>${order.shippingAddress.country}, ${
-      order.shippingAddress.postalCode
-    }</p>
+              <p>${order.shippingAddress.address}, ${order.shippingAddress.city}</p>
+              <p>${order.shippingAddress.country}, ${order.shippingAddress.postalCode}</p>
             </div>
             
             <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
@@ -228,6 +230,7 @@ export const sendOrderDeliveredEmail = async (email, order) => {
       </body>
       </html>
     `,
+    attachments: attachments,
   };
 
   try {
@@ -238,3 +241,4 @@ export const sendOrderDeliveredEmail = async (email, order) => {
     throw new Error("Failed to send order delivered email");
   }
 };
+
