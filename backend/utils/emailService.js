@@ -198,7 +198,7 @@ export const sendOrderDeliveredEmail = async (email, order) => {
                 .map(
                   (item) => `
                 <div class="order-item">
-                  <img src="${item.image}" alt="${item.name}" width="50" height="50">
+                  <img src="/${item.image}" alt="${item.name}" width="50" height="50">
                   <div class="item-info">
                     <p><strong>Product:</strong> ${item.name}</p>
                     <p><strong>Quantity:</strong> ${item.qty}</p>
