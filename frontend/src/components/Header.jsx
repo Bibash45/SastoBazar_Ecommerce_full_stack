@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Badge, Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
-import { FaShoppingCart, FaUser } from "react-icons/fa";
+import { FaShoppingCart, FaUser, FaMusic } from "react-icons/fa";
 import logo from "../assets/logo4.png";
 import { LinkContainer } from "react-router-bootstrap";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import SearchBox from "./SearchBox";
 import { resetCart } from "../slices/cartSlice";
-import { setActiveLink, playSound } from "../slices/soundSlice";
+import { setActiveLink, playSound, stopSound } from "../slices/soundSlice";
 import SoundPreloader from "../utils/preloadSounds";
 
 const Header = () => {
@@ -20,10 +20,54 @@ const Header = () => {
   const navigate = useNavigate();
 
   const [logoutApiCall] = useLogoutMutation();
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false); // Tracks music state
+
+  // Handle music play/pause based on the visibility of the page
+  useEffect(() => {
+    // Load music state from localStorage on component mount
+    const savedMusicState = localStorage.getItem("isMusicPlaying");
+    if (savedMusicState === "true") {
+      setIsMusicPlaying(true);
+      dispatch(playSound("backgroundSound"));
+    }
+
+    // Listen for tab visibility changes
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Pause music if the page is hidden (user switches tab or minimizes)
+        if (isMusicPlaying) {
+          dispatch(stopSound("backgroundSound"));
+        }
+      } else {
+        // Resume music if it's playing
+        if (isMusicPlaying) {
+          dispatch(playSound("backgroundSound"));
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [isMusicPlaying, dispatch]);
+
+  // Toggle music play/pause
+  const toggleMusic = () => {
+    if (isMusicPlaying) {
+      dispatch(stopSound("backgroundSound"));
+      localStorage.setItem("isMusicPlaying", "false");
+    } else {
+      dispatch(playSound("backgroundSound"));
+      localStorage.setItem("isMusicPlaying", "true");
+    }
+    setIsMusicPlaying(!isMusicPlaying);
+  };
 
   const handleClick = (to) => {
     dispatch(setActiveLink(to));
-    dispatch(playSound("mouseSound")); // Play the mouse click sound
+    dispatch(playSound("mouseSound")); // Play mouse click sound
   };
 
   const logoutHandler = async () => {
@@ -116,6 +160,8 @@ const Header = () => {
                   </LinkContainer>
                 )}
 
+               
+
                 {userInfo && userInfo.isAdmin && (
                   <NavDropdown
                     title="Admin"
@@ -142,6 +188,14 @@ const Header = () => {
                     </LinkContainer>
                   </NavDropdown>
                 )}
+                 {/* Music Button with Play/Pause Functionality */}
+                 <button
+                  className={`music-btn ${isMusicPlaying ? "music-playing" : ""}`}
+                  onClick={toggleMusic}
+                >
+                  <FaMusic className="me-2" />
+                  {isMusicPlaying ? "Pause Music" : "Play Music"}
+                </button>
               </Nav>
             </Navbar.Collapse>
           </Container>
