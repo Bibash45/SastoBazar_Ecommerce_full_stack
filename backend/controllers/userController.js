@@ -2,10 +2,14 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import generateToken from "../utils/generateToken.js";
-import { sendVerificationEmail,sendResetPasswordEmail } from "../utils/emailService.js";
+import {
+  sendVerificationEmail,
+  sendResetPasswordEmail,
+} from "../utils/emailService.js";
 import { OAuth2Client } from "google-auth-library";
-import bcrypt from "bcryptjs"
-
+import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
+dotenv.config();
 
 // @desc    Auth user & get token
 // @route   POST/api/users/login
@@ -44,9 +48,9 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExist = await User.findOne({ email });
 
   if (userExist) {
-    
     res.status(200).json({
-      message: "User already exist , please complete verification step to continue",
+      message:
+        "User already exist , please complete verification step to continue",
     });
     return; // Stop further execution
   }
@@ -71,7 +75,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (user) {
     res.status(201).json({
-      message: "Verification code sent to email. Complete registration by verifying the code.",
+      message:
+        "Verification code sent to email. Complete registration by verifying the code.",
       email: user.email,
     });
   } else {
@@ -79,7 +84,6 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
-
 
 // @desc    Verify user code
 // @route   POST/api/users/verify-code
@@ -259,39 +263,88 @@ const googleLogin = asyncHandler(async (req, res) => {
   const { token } = req.body;
 
   try {
-    console.log("Received idToken:", token);
-    // Verify the Google token
+    // Verify the Google ID Token
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: process.env.GOOGLE_CLIENT_ID, // Ensure you are using your Google Client ID here
     });
 
-    const payload = ticket.getPayload();
-    const { email, name, sub: googleId } = payload;
+    const payload = ticket.getPayload(); // Retrieve the payload (user data)
 
-    // Find or create the user based on the Google ID
-    let user = await User.findOne({ googleId });
+    console.log(payload);
+    
 
-    if (!user) {
-      user = await User.create({
-        name,
-        email,
-        isVerified: true,
+    if (!payload) {
+      return res.status(400).json({
+        error: "Google login failed. No payload received.",
       });
     }
 
-    // Generate JWT for the user
-    generateToken(res, user._id);
+    const { email_verified, email, name } = payload;
 
-    res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
+    // Log the Google payload for debugging purposes (optional)
+    console.log("Google Payload:", payload);
+
+    // Check if email is verified by Google
+    if (!email_verified) {
+      return res.status(400).json({
+        error: "Google login failed. Email not verified.",
+      });
+    }
+
+    // Check if user already exists in the database
+    let user = await User.findOne({ email });
+
+    if (user) {
+      // User exists, generate a new JWT token
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      // Respond with token and user data
+      return res.json({
+        token,
+        user: {
+          _id: user._id,
+          email: user.email,
+          name: user.name,
+          isAdmin: user.isAdmin,
+        },
+      });
+    } else {
+      // User does not exist, create a new user
+      const password = email + process.env.JWT_SECRET; // Use email + secret as a temporary password
+      user = new User({
+        name,
+        email,
+        password,
+        isVerified: true, // Google account should be considered verified
+      });
+
+      // Save the new user to the database
+      const savedUser = await user.save();
+
+      // Generate a new JWT token for the new user
+      const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      // Respond with the token and user data
+      return res.json({
+        token,
+        user: {
+          _id: savedUser._id,
+          email: savedUser.email,
+          name: savedUser.name,
+          role: savedUser.isAdmin ? "Admin" : "User", // Example: Add roles
+        },
+      });
+    }
+  } catch (err) {
+    console.log("ERROR GOOGLE LOGIN", err);
+    return res.status(400).json({
+      error: "Failed to authenticate user. Please try again.",
     });
-  } catch (error) {
-    console.error("Google Login Error:", error);
-    res.status(401).json({ message: "Invalid Google token" });
   }
 });
 
@@ -314,7 +367,9 @@ const resendVerificationCode = asyncHandler(async (req, res) => {
   }
 
   // Generate a new 6-digit code for email verification
-  const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const verificationCode = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString();
   const verificationCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
 
   // Send verification email
@@ -394,7 +449,6 @@ const resetPassword = asyncHandler(async (req, res) => {
 
   res.status(200).json({ message: "Password reset successful" });
 });
-
 
 export {
   authUser,

@@ -25,7 +25,14 @@ const ProductCarousel = () => {
         {products.map((product) => (
           <Carousel.Item key={product._id}>
             <Link to={`/product/${product._id}`} className="nav-link" onClick={handleSound}>
-              <Image src={product.image} alt={product.name} fluid />
+              {/* Add responsive styles */}
+              <Image
+                src={product.image}
+                alt={product.name}
+                fluid
+                className="d-block mx-auto"
+                style={{ maxHeight: "450px", objectFit: "contain" }}
+              />
               <Carousel.Caption className="carousel-caption">
                 <h2>
                   {product.name} (${product.price})

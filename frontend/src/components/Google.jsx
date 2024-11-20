@@ -8,7 +8,10 @@ import { setActiveLink, playSound } from "../slices/soundSlice";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
 
+
+
 const Google = () => {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -22,21 +25,21 @@ const Google = () => {
     dispatch(playSound("loginSound")); // Use the correct sound key here
   };
 
-  const handleNotificationSound=()=>{
-    dispatch(playSound("notificationSound"))
-  }
-
+  const handleNotificationSound = () => {
+    dispatch(playSound("notificationSound"));
+  };
 
   const handleSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
-    console.log(token);
     try {
-      const res = await googleLogin({  token }).unwrap();
-      dispatch(setCredentials({ ...res }));
+      const res = await googleLogin({ token }).unwrap();
+      const user = res.user;
+
+      dispatch(setCredentials({ ...user }));
       handleLinkClick(redirect); // Play sound and set active link
       navigate(redirect);
     } catch (error) {
-      handleNotificationSound()
+      handleNotificationSound();
       toast.error(error?.data?.message || error.error);
       console.error("Login error:", error); // Log the error for debugging
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -57,7 +58,6 @@ const router = createBrowserRouter(
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
 
-
       <Route path="" element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
@@ -81,17 +81,19 @@ const router = createBrowserRouter(
   )
 );
 
+console.log("GOOGLE CLIENT ID : ", process.env.REACT_APP_GOOGLE_CLIENT_ID);
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-  <GoogleOAuthProvider clientId="1031298587882-qsd7q4mv1p3iqo124h9pmfgch9cbluu0.apps.googleusercontent.com">
-    <HelmetProvider>
-      <Provider store={store}>
-        <PayPalScriptProvider deferLoading={true}>
-          <RouterProvider router={router} />
-        </PayPalScriptProvider>
-      </Provider>
-    </HelmetProvider>
-  </GoogleOAuthProvider>
-   </React.StrictMode>
+    <GoogleOAuthProvider clientId="1031298587882-qsd7q4mv1p3iqo124h9pmfgch9cbluu0.apps.googleusercontent.com">
+      <HelmetProvider>
+        <Provider store={store}>
+          <PayPalScriptProvider deferLoading={true}>
+            <RouterProvider router={router} />
+          </PayPalScriptProvider>
+        </Provider>
+      </HelmetProvider>
+    </GoogleOAuthProvider>
+  </React.StrictMode>
 );
