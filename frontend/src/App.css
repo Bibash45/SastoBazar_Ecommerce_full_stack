@@ -1,0 +1,182 @@
+.navbar .nav-link,
+.navbar .dropdown-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-center {
+  display: flex;
+  align-items: center;
+}
+
+/* css for admin side bar */
+.collapsed-sidebar .nav-link span {
+  display: none;
+}
+
+.collapsed-sidebar .me-2 {
+  margin-right: 0 !important;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+  background-color: #495057;
+  text-decoration: none;
+  color: white !important;
+}
+
+.nav-link .me-2 {
+  font-size: 1.2rem;
+}
+
+.collapsed-sidebar h4 {
+  display: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* start of  sidebar active links css */
+.sidebar .nav-link.active {
+  background-color: #495057; /* Example: Darker background */
+  border-radius: 4px;
+}
+
+/* end of  sidebar active links css */
+
+/* start of headerwithsearch and filter admin */
+header {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.input-group > .form-control {
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.input-group > .btn {
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+/* end of headerwithsearch and filter admin */
+
+/* hover of back icon arrow admin */
+
+.icon-hover:hover {
+  color: rgb(79, 76, 76); /* Changes color to gray when hovered */
+  cursor: pointer; /* Makes the cursor a pointer when hovered */
+  transform: translateY(-3px); /* Moves the icon 5px upwards */
+  transition: transform 0.2s ease, color 0.2s ease; /* Smooth transition for color and movement */
+}
+
+/* css for the arrow of category list search */
+.hover-icon:hover {
+  color: #007bff; /* Change the color on hover */
+  transform: scale(1.2); /* Add a slight zoom effect */
+}
+
+input.form-control:hover {
+  border-color: #007bff; /* Highlight input border on hover */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Add a glowing effect */
+  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.hover-icon:hover {
+  animation: bounce 0.5s ease-in-out;
+}
+
+/* end of arrow css of category list */
+
+/* start of css of admin product list images component */
+.thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
+.hover-image {
+  position: absolute;
+  top: 250px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 2px solid #ddd;
+  background: #fff;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+.hover-image img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* end of css of admin product list images component */
+
+/* Custom CSS for active pagination item */
+.active-page {
+  background-color: #5a6673 !important; /* Blue background */
+  color: white !important; /* White text */
+  border-color: #007bff !important;
+}
+
+/* start CSS for animating words dashboard */
+.ml10 {
+  position: relative;
+  font-weight: 900;
+  font-size: 4em;
+}
+
+.ml10 .text-wrapper {
+  position: relative;
+  display: inline-block;
+  padding-top: 0.2em;
+  padding-right: 0.05em;
+  padding-bottom: 0.1em;
+  overflow: hidden;
+}
+
+.ml10 .letter {
+  display: inline-block;
+  line-height: 1em;
+  transform-origin: 0 0;
+}
+/* end CSS for animating words dashboard */
