@@ -1,0 +1,189 @@
+main {
+  min-height: 80vh;
+}
+
+.rating span {
+  margin: 0.1rem;
+}
+
+.rating svg {
+  color: #f8e825;
+}
+
+.rating-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding-left: 0.5rem;
+}
+
+.product-title {
+  height: 2.5em; /* Set a fixed height */
+  overflow: hidden; /* Hide overflow content */
+  text-overflow: ellipsis; /* Add ellipsis for long text */
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+table td,
+table th {
+  text-align: center;
+}
+
+.review {
+  margin-top: 30px;
+}
+
+.review h2 {
+  font-size: 24px;
+  background: #f4f4f4;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.review button {
+  margin-top: 10px;
+}
+
+.carousel-caption {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.nav-icon {
+  margin-right: 5px; /* Add some space between the icon and text */
+  font-size: 20px; /* Adjust size if necessary */
+  color: white; /* Ensure the icons are visible */
+}
+
+
+/* for google login  */
+
+.hr-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hr-line {
+  flex: 1;
+  border: none;
+  border-top: 1px solid #000; /* Customize color */
+  margin: 0 10px; /* Adjust spacing between line and text */
+}
+
+/* ---------footer start ----------- */
+.footer {
+  background-color: #373737;
+  color: white;
+}
+
+/* -----------end footer ----------- */
+
+ 
+
+/* Music Button Styling */
+.music-btn {
+  background: linear-gradient(45deg, #6a5acd, #4b0082);  /* Gradient background */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s ease-out;
+  margin-left: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.music-btn:hover {
+  background: linear-gradient(45deg, #4b0082, #6a5acd);  /* Reverse gradient on hover */
+  transform: scale(1.1);  /* Slightly enlarge on hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);  /* Add more shadow on hover */
+}
+
+.music-btn:focus {
+  outline: none;
+}
+
+.music-btn .fa-music {
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+/* Animation for the "Music Playing" state */
+.music-playing {
+  animation: glow 1.5s infinite alternate, bounce 0.6s ease-in-out, scale 1.5s ease-in-out infinite;
+  color: #ffdc00;  /* Glowing color */
+  font-weight: bold;
+}
+
+.music-playing .fa-music {
+  animation: rotate 2s infinite linear;
+  transform-origin: center center;
+}
+
+/* Glow Animation */
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 10px #ffdc00, 0 0 20px #ffdc00, 0 0 30px #ffdc00;
+  }
+  100% {
+    text-shadow: 0 0 20px #ffdc00, 0 0 40px #ffdc00, 0 0 50px #ffdc00;
+  }
+}
+
+/* Rotation Animation */
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-5px);  /* Move up a little */
+  }
+  50% {
+    transform: translateY(0);  /* Back to original position */
+  }
+  70% {
+    transform: translateY(-5px);  /* Move up a little again */
+  }
+  100% {
+    transform: translateY(0);  /* Back to original position */
+  }
+}
+
+/* Scale Animation */
+@keyframes scale {
+  0% {
+    transform: scale(1);  /* Original size */
+  }
+  50% {
+    transform: scale(1.1);  /* Slightly bigger */
+  }
+  100% {
+    transform: scale(1);  /* Original size */
+  }
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+  .music-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
