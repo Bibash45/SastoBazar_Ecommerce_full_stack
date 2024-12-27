@@ -178,7 +178,7 @@ const DashboardScreen = () => {
       <Container fluid>
         <marquee>
           <h1>
-            <span className="text-danger">A</span>
+            <span className="text-success">A</span>
             <span className="text-info">D</span>
             <span className="text-warning">M</span>
             <span className="text-success">I</span>
