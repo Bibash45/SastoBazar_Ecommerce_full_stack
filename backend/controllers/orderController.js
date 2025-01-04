@@ -177,13 +177,13 @@ const getOrders = asyncHandler(async (req, res) => {
 
     if (req.query.email) {
       userFilter.$and[0].$or.push({
-        email: { $regex: req.query.email, $options: "i" }, // Case-insensitive search for email
+        email: { $regex: req.query.email, $options: "i" }, 
       });
     }
 
     if (req.query.customerName) {
       userFilter.$and[0].$or.push({
-        name: { $regex: req.query.customerName, $options: "i" }, // Case-insensitive search for customer name
+        name: { $regex: req.query.customerName, $options: "i" }, 
       });
     }
 

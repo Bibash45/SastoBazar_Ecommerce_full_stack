@@ -1,111 +1,131 @@
 import React from "react";
-import { FaFacebook, FaShoppingCart, FaUser, FaTwitter, FaInstagram } from "react-icons/fa";
+import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo4.png";
 import { useDispatch } from "react-redux";
-import { playSound } from "../slices/soundSlice"; // Import your sound action
+import { playSound } from "../slices/soundSlice";
 
 const Footer = () => {
   const dispatch = useDispatch();
 
-  // Function to handle button or link click with sound
   const handleClick = () => {
     dispatch(playSound("mouseSound")); // Play sound on click
   };
 
   return (
-    <div className="footer container-fluid">
-      <footer className="footer container d-flex justify-content-evenly row row-cols-1 row-cols-sm-2 row-cols-md-5 pt-4 mt-5 m-auto">
-        <div className="d-flex align-items-center justify-content-center col mb-3">
-          <Link
-            to="/"
-            className="d-flex flex-row flex-sm-column mb-3 link-body-emphasis text-decoration-none"
-            onClick={handleClick} // Add onClick for sound
-          >
-            <img
-              className="img-fluid"
-              src={logo}
-              alt="logo"
-              style={{ width: "60px" }}
-            />
-            <h5 className="my-2 d-none d-md-block"> {/* Hide only on mobile */}
-              <span className="pt-2">
+    <div className="footer bg-dark text-light py-4">
+      <footer className="container">
+        <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 gy-4">
+          {/* Logo and Branding */}
+          <div className="col text-center">
+            <Link
+              to="/"
+              className="d-flex flex-column align-items-center text-decoration-none"
+              onClick={handleClick}
+            >
+              <img
+                src={logo}
+                alt="logo"
+                className="img-fluid"
+                style={{ width: "80px" }}
+              />
+              <h5 className="mt-2">
                 <span style={{ color: "rgb(255, 0, 0)", fontWeight: "600" }}>
                   Sasto
                 </span>
                 <span style={{ color: "#394bea", fontWeight: "500" }}>
                   Bazar
                 </span>
-              </span>
-            </h5>
-          </Link>
-        </div>
+              </h5>
+            </Link>
+          </div>
 
-        <div className="col mb-3 text-center">
-          <h5>Company</h5>
-          <ul className="nav flex-column pt-2">
-            <li className="nav-item mb-2">
-              <Link to="/" className="nav-link p-0 text-white fw-light" onClick={handleClick}>
-                Home
-              </Link>
-            </li>
-            <li className="nav-item mb-2">
-              <Link to="/about-us" className="nav-link p-0 text-white fw-light" onClick={handleClick}>
-                About Us
-              </Link>
-            </li>
-            <li className="nav-item mb-2">
-              <Link to="/contact" className="nav-link p-0 text-white fw-light" onClick={handleClick}>
-                Contact
-              </Link>
-            </li>
-          </ul>
-        </div>
+          {/* Company Links */}
+          <div className="col text-center">
+            <h5>Company</h5>
+            <ul className="list-unstyled mt-3">
+              <li>
+                <Link
+                  to="/"
+                  className="text-light text-decoration-none"
+                  onClick={handleClick}
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about-us"
+                  className="text-light text-decoration-none"
+                  onClick={handleClick}
+                >
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="text-light text-decoration-none"
+                  onClick={handleClick}
+                >
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        <div className="col mb-3 text-center">
-          <h5>Telephone</h5>
-          <ul className="nav flex-column pt-2">
-            <li className="nav-item mb-2">
-              <Link to="#" className="nav-link p-0 text-white fw-light" onClick={handleClick}>
-                Office:+012235
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="#" className="nav-link p-0 text-white fw-light" onClick={handleClick}>
-                FAX:8945982
-              </Link>
-            </li>
-          </ul>
-        </div>
+          {/* Telephone */}
+          <div className="col text-center">
+            <h5>Contact</h5>
+            <ul className="list-unstyled mt-3">
+              <li>
+                <span className="text-light d-block">Office: +012235</span>
+              </li>
+              <li>
+                <span className="text-light d-block">FAX: 8945982</span>
+              </li>
+            </ul>
+          </div>
 
-        <div className="col mb-3 text-center">
-          <h5>Contact Us</h5>
-          <ul className="nav d-flex flex-column">
-            <li>
-              <Link className="text-light fs-2" to="" onClick={handleClick}>
+          {/* Social Links */}
+          <div className="col text-center">
+            <h5>Follow Us</h5>
+            <div className="d-flex justify-content-center gap-3 mt-3">
+              <Link
+                to="#"
+                className="text-light fs-3"
+                aria-label="Facebook"
+                onClick={handleClick}
+              >
                 <FaFacebook />
               </Link>
-            </li>
-            <li>
-              <Link className="text-light fs-2" to="" onClick={handleClick}>
+              <Link
+                to="#"
+                className="text-light fs-3"
+                aria-label="Twitter"
+                onClick={handleClick}
+              >
                 <FaTwitter />
               </Link>
-            </li>
-            <li>
-              <Link className="text-light fs-2" to="" onClick={handleClick}>
+              <Link
+                to="#"
+                className="text-light fs-3"
+                aria-label="Instagram"
+                onClick={handleClick}
+              >
                 <FaInstagram />
               </Link>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
-      </footer>
-      <div className="align-items-center text-white pb-1">
-        <div className="border-top text-white py-2 mx-5 opacity-30">
-          <p className="m-0 text-center opacity-50">
+
+        {/* Footer Bottom */}
+        <div className="mt-4 border-top pt-3">
+          <p className="text-center mb-0">
             Copyright © 2024. All rights reserved.
           </p>
         </div>
-      </div>
+      </footer>
     </div>
   );
 };
