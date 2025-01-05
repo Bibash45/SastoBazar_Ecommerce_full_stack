@@ -40,22 +40,21 @@ const OrderListScreen = () => {
   console.log(orders);
 
   return (
-    <>
+    <div
+      style={{
+        paddingLeft: "250px",
+      }}
+    >
+      <marquee>
+        <h1>Orders List</h1>
+      </marquee>
+      <SearchForOrder />
       {!orders ? (
-        <div
-          style={{
-            paddingLeft: "250px",
-          }}
-        >
+        <div>
           <Message variant="danger">No orders found</Message>
         </div>
       ) : (
-        <div
-          className="w-full"
-          style={{
-            paddingLeft: "250px",
-          }}
-        >
+        <div className="w-full">
           {isLoading ? (
             <Loader />
           ) : error ? (
@@ -64,10 +63,6 @@ const OrderListScreen = () => {
             </Message>
           ) : (
             <>
-              <marquee>
-                <h1>Orders List</h1>
-              </marquee>
-              <SearchForOrder />
               <Table striped hover responsive className="table-sm">
                 <thead className="table-dark">
                   <tr>
@@ -122,7 +117,7 @@ const OrderListScreen = () => {
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

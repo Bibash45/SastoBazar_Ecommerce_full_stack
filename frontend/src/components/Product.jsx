@@ -19,7 +19,7 @@ const Product = ({ product }) => {
     <Card className="my-3 p-3 rounded" onClick={handleSound}>
       <Link to={`/product/${product._id}`}>
         <Card.Img
-          src={`http://localhost:5000/${product.images[0]}`}
+          src={`/${product.images[0]}`}
           variant="top"
         />
       </Link>

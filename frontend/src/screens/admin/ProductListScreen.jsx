@@ -106,11 +106,11 @@ const ProductListScreen = () => {
                         {product.images.map((img, index) => (
                           <img
                             key={index}
-                            src={`http://localhost:5000/${img}`}
+                            src={`/${img}`}
                             alt={`Product ${index + 1}`}
                             className="thumbnail"
                             onMouseEnter={() =>
-                              setHoveredImage(`http://localhost:5000/${img}`)
+                              setHoveredImage(`/${img}`)
                             }
                           />
                         ))}

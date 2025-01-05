@@ -130,7 +130,7 @@ const ProductScreen = () => {
           <div className="main-image-container">
             {/* Main Image */}
             <Image
-              src={`http://localhost:5000/${mainImage || product.images[0]}`}
+              src={`/${mainImage || product.images[0]}`}
               alt={product.name}
               fluid
               className="main-image"
@@ -143,7 +143,7 @@ const ProductScreen = () => {
               {product.images.map((image, index) => (
                 <div key={index} onMouseEnter={() => setMainImage(image)}>
                   <Image
-                    src={`http://localhost:5000/${image}`}
+                    src={`/${image}`}
                     alt={`${product.name}  ${index + 1}`}
                     fluid
                   />
